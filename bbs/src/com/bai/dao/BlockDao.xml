@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bai.dao.BlockDao">
+	<select id="getBlocks" resultType="Block">
+		select block.bid,bname,bdesc,block.uid,btime,COUNT(article.bid) bnum 
+		from block
+		LEFT JOIN article
+		ON block.bid = article.bid 
+		GROUP BY block.bid;
+	</select>
+	<select id="getArticles" parameterType="Block" resultType="Article">
+		select article.aid,aname,adesc,article.uid,bid,atime,COUNT(reply.aid) anum
+		from article LEFT JOIN reply ON article.aid = reply.aid
+		WHERE article.bid =#{bid}
+		GROUP BY article.aid
+	</select>
+	<select id="getReplies" parameterType="Article" resultType="Reply">
+		select reply.rid,rdesc,reply.uid,rtime,COUNT(reply.rid) rnum 
+		from article,reply 
+		WHERE article.aid = reply.aid AND reply.aid =#{aid}
+		GROUP BY reply.rid;
+	</select>
+	<insert id="reply" parameterType="Reply">
+		INSERT INTO reply (rid,rdesc,uid,rtime,aid) VALUES(#{rid},#{rdesc},#{uid},#{rtime},#{aid});
+	</insert>
+	<insert id="article" parameterType="Article">
+		INSERT INTO article (aid,aname,adesc,uid,atime,bid) VALUES(#{aid},#{aname},#{adesc},#{uid},#{atime},#{bid});
+	</insert>
+	
+</mapper>

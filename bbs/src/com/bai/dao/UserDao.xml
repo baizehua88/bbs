@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bai.dao.UserDao">
+	<select id="login" parameterType="User" resultType="User">
+	select id,`name`,`password`,state from user
+	where id = #{id} and password = #{password}
+	</select>
+
+	<select id="getUsers" resultType="User">
+		select * from user where state !='0'
+	</select>
+	
+	<update id="updateState" parameterType="User">
+		update user set state = #{state} where id = #{id}
+	</update>
+	
+	<update id="updateUser" parameterType="User">
+		update user set password = #{newpassword},name =#{name} where id = #{id}
+	</update> 
+	<select id="getUserById" parameterType="User" resultType="User">
+		select * from user where id = #{id}
+	</select>
+	<insert id="addUser" parameterType="User">
+		INSERT INTO `user` (id,name,password,state) VALUES(#{id},#{name},#{password},1)	
+	</insert>
+	<!-- <delete id="userDelete" parameterType="int">
+		delete from tb_user where id = #{id}
+	</delete>
+	
+	<select id="getUserById" parameterType="int" resultType="User">
+		select id,user_name userName,user_password userPass from tb_user
+		where id = #{id}
+	</select>
+	
+	<update id="userUpdate" parameterType="User">
+		update tb_user set user_password = #{userPass} where id = #{id}
+	</update> -->
+ 		
+ 	
+</mapper>
